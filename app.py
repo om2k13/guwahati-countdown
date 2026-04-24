@@ -2,7 +2,7 @@ import random
 from datetime import datetime
 
 import streamlit as st
-from streamlit_autorefresh import st_autorefresh
+from streamlit.components.v1 import html
 
 MEET_TIME = datetime(2026, 4, 30, 8, 15, 0)
 COUNTDOWN_START = datetime(2026, 4, 24, 14, 0, 0)
@@ -23,8 +23,11 @@ ROMANTIC_FUNNY_LINES = [
 ]
 
 st.set_page_config(page_title="Omkar + Illia", page_icon="💖", layout="centered")
-# Re-run the script every second so the timer updates in real time.
-st_autorefresh(interval=1000, key="live_countdown_refresh")
+# Re-run the page every second without showing an extra widget.
+html(
+    "<script>setTimeout(function(){ window.parent.location.reload(); }, 1000);</script>",
+    height=0,
+)
 
 st.markdown(
     """
@@ -32,10 +35,6 @@ st.markdown(
     .stApp {
         background: linear-gradient(140deg, #12071f 0%, #2d103c 45%, #5c1d5d 100%);
         color: #fff6fc;
-    }
-    /* Hide the visible autorefresh widget bar at the very top. */
-    .stApp [data-testid="stVerticalBlock"] > [data-testid="stElementContainer"]:first-child {
-        display: none;
     }
     .main-card {
         border-radius: 24px;
