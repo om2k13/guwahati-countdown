@@ -2,6 +2,7 @@ import random
 from datetime import datetime
 
 import streamlit as st
+from streamlit.components.v1 import html
 
 MEET_TIME = datetime(2026, 4, 30, 8, 15, 0)
 
@@ -35,16 +36,24 @@ st.markdown(
     [data-testid="stDecoration"],
     [data-testid="stStatusWidget"],
     [data-testid="stSidebarNav"],
+    [data-testid="stAppDeployButton"],
+    [data-testid="stAppGitHubButton"],
     footer {
         display: none !important;
     }
+    [data-testid="stAppViewContainer"] {
+        padding-top: 0 !important;
+    }
+    .main {
+        padding-top: 0 !important;
+    }
     .block-container {
         max-width: 760px;
-        padding-top: 0.6rem;
-        padding-bottom: 1.8rem;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
     }
     .main .block-container {
-        min-height: 88vh;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -102,6 +111,28 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True,
+)
+html(
+    """
+    <script>
+      (function () {
+        const hideBottomRight = () => {
+          const doc = window.parent.document;
+          doc.querySelectorAll("*").forEach((el) => {
+            const s = window.parent.getComputedStyle(el);
+            if (s.position === "fixed") {
+              const right = parseInt(s.right || "9999", 10);
+              const bottom = parseInt(s.bottom || "9999", 10);
+              if (right <= 48 && bottom <= 48) el.style.display = "none";
+            }
+          });
+        };
+        hideBottomRight();
+        setInterval(hideBottomRight, 1200);
+      })();
+    </script>
+    """,
+    height=0,
 )
 
 st.markdown('<div class="headline">Omkar ❤️ Illia</div>', unsafe_allow_html=True)
