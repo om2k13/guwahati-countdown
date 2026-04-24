@@ -29,20 +29,36 @@ st.markdown(
         background: linear-gradient(140deg, #12071f 0%, #2d103c 45%, #5c1d5d 100%);
         color: #fff6fc;
     }
+    /* Hide Streamlit chrome elements (header/toolbar/footer). */
+    header[data-testid="stHeader"],
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    [data-testid="stStatusWidget"],
+    [data-testid="stSidebarNav"],
+    footer {
+        display: none !important;
+    }
     .block-container {
-        padding-top: 2.4rem;
-        padding-bottom: 2rem;
+        max-width: 760px;
+        padding-top: 0.6rem;
+        padding-bottom: 1.8rem;
+    }
+    .main .block-container {
+        min-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     .headline {
         text-align: center;
         font-size: 2rem;
         font-weight: 700;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.35rem;
     }
     .subline {
         text-align: center;
         opacity: 0.95;
-        margin-bottom: 1rem;
+        margin-bottom: 1.3rem;
         font-size: 1.05rem;
     }
     .mini-title {
@@ -69,7 +85,7 @@ st.markdown(
         letter-spacing: 0.04em;
     }
     .line-card {
-        margin-top: 1rem;
+        margin-top: 1.15rem;
         border-radius: 16px;
         padding: 0.95rem 1rem;
         background: rgba(255, 255, 255, 0.11);
@@ -77,8 +93,11 @@ st.markdown(
         font-size: 1rem;
     }
     .stButton {
-        margin-top: 0.55rem;
-        margin-bottom: 0.3rem;
+        margin-top: 1rem;
+        margin-bottom: 0.4rem;
+    }
+    [data-testid="column"] {
+        padding-bottom: 0.2rem;
     }
     </style>
     """,
