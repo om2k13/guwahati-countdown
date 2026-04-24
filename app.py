@@ -2,7 +2,6 @@ import random
 from datetime import datetime
 
 import streamlit as st
-from streamlit.components.v1 import html
 
 MEET_TIME = datetime(2026, 4, 30, 8, 15, 0)
 COUNTDOWN_START = datetime(2026, 4, 24, 14, 0, 0)
@@ -23,11 +22,6 @@ ROMANTIC_FUNNY_LINES = [
 ]
 
 st.set_page_config(page_title="Omkar + Illia", page_icon="💖", layout="centered")
-# Re-run the page every second without showing an extra widget.
-html(
-    "<script>setTimeout(function(){ window.parent.location.reload(); }, 1000);</script>",
-    height=0,
-)
 
 st.markdown(
     """
@@ -94,9 +88,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-now = datetime.now()
-diff = MEET_TIME - now
-
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 st.markdown('<div class="headline">Omkar ❤️ Illia</div>', unsafe_allow_html=True)
 st.markdown(
@@ -104,59 +95,65 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if diff.total_seconds() > 0:
-    days = diff.days
-    hours, remainder = divmod(diff.seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
+if "last_line" not in st.session_state:
+    st.session_state["last_line"] = random.choice(ROMANTIC_FUNNY_LINES)
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
+
+@st.fragment(run_every="1s")
+def render_live_countdown() -> None:
+    now = datetime.now()
+    diff = MEET_TIME - now
+
+    if diff.total_seconds() > 0:
+        days = diff.days
+        hours, remainder = divmod(diff.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.markdown(
+                f'<div class="time-box"><div class="time-number">{days}</div><div class="time-label">DAYS</div></div>',
+                unsafe_allow_html=True,
+            )
+        with col2:
+            st.markdown(
+                f'<div class="time-box"><div class="time-number">{hours}</div><div class="time-label">HOURS</div></div>',
+                unsafe_allow_html=True,
+            )
+        with col3:
+            st.markdown(
+                f'<div class="time-box"><div class="time-number">{minutes}</div><div class="time-label">MINUTES</div></div>',
+                unsafe_allow_html=True,
+            )
+        with col4:
+            st.markdown(
+                f'<div class="time-box"><div class="time-number">{seconds}</div><div class="time-label">SECONDS</div></div>',
+                unsafe_allow_html=True,
+            )
+
+        total_wait_seconds = max((MEET_TIME - COUNTDOWN_START).total_seconds(), 1)
+        remaining_seconds = max((MEET_TIME - now).total_seconds(), 0)
+        progress = max(0.0, min(1.0, 1 - (remaining_seconds / total_wait_seconds)))
+
+        st.markdown('<div class="mini-title">Love Bar</div>', unsafe_allow_html=True)
+        st.progress(progress)
+
+        if st.button("Give me a new love line 💌", use_container_width=True):
+            previous_line = st.session_state.get("last_line", "")
+            available_lines = [line for line in ROMANTIC_FUNNY_LINES if line != previous_line]
+            st.session_state["last_line"] = random.choice(
+                available_lines if available_lines else ROMANTIC_FUNNY_LINES
+            )
+
         st.markdown(
-            f'<div class="time-box"><div class="time-number">{days}</div><div class="time-label">DAYS</div></div>',
+            f'<div class="line-card">{st.session_state["last_line"]}</div>',
             unsafe_allow_html=True,
         )
-    with col2:
-        st.markdown(
-            f'<div class="time-box"><div class="time-number">{hours}</div><div class="time-label">HOURS</div></div>',
-            unsafe_allow_html=True,
-        )
-    with col3:
-        st.markdown(
-            f'<div class="time-box"><div class="time-number">{minutes}</div><div class="time-label">MINUTES</div></div>',
-            unsafe_allow_html=True,
-        )
-    with col4:
-        st.markdown(
-            f'<div class="time-box"><div class="time-number">{seconds}</div><div class="time-label">SECONDS</div></div>',
-            unsafe_allow_html=True,
-        )
+    else:
+        st.balloons()
+        st.success("It is finally our moment. I am all yours. ❤️")
 
-    total_wait_seconds = max((MEET_TIME - COUNTDOWN_START).total_seconds(), 1)
-    remaining_seconds = max((MEET_TIME - now).total_seconds(), 0)
-    progress = max(0.0, min(1.0, 1 - (remaining_seconds / total_wait_seconds)))
 
-    st.markdown('<div class="mini-title">Love Bar: getting closer to our hug</div>', unsafe_allow_html=True)
-    st.progress(progress)
-    st.caption(
-        f"Love meter: {progress * 100:.1f}% | Flight at 5:00 AM, landing at 8:15 AM on April 30."
-    )
-
-    if "last_line" not in st.session_state:
-        st.session_state["last_line"] = random.choice(ROMANTIC_FUNNY_LINES)
-    selected_line = st.session_state["last_line"]
-
-    if st.button("Give me a new love line 💌", use_container_width=True):
-        previous_line = st.session_state.get("last_line", "")
-        available_lines = [line for line in ROMANTIC_FUNNY_LINES if line != previous_line]
-        st.session_state["last_line"] = random.choice(
-            available_lines if available_lines else ROMANTIC_FUNNY_LINES
-        )
-        selected_line = st.session_state["last_line"]
-
-    st.markdown(f'<div class="line-card">{selected_line}</div>', unsafe_allow_html=True)
-    st.caption("Timer updates every second. Tap the button for a new funny + romantic line.")
-else:
-    st.balloons()
-    st.success("It is finally our moment. I am all yours. ❤️")
+render_live_countdown()
 
 st.markdown("</div>", unsafe_allow_html=True)
