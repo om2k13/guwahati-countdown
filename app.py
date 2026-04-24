@@ -29,15 +29,9 @@ st.markdown(
         background: linear-gradient(140deg, #12071f 0%, #2d103c 45%, #5c1d5d 100%);
         color: #fff6fc;
     }
-    .main-card {
-        border-radius: 24px;
-        padding: 1.2rem 1.4rem 1.4rem;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-        backdrop-filter: blur(4px);
-        margin-top: 0.8rem;
-        margin-bottom: 0.8rem;
+    .block-container {
+        padding-top: 2.4rem;
+        padding-bottom: 2rem;
     }
     .headline {
         text-align: center;
@@ -82,12 +76,15 @@ st.markdown(
         border-left: 4px solid #ff8fd8;
         font-size: 1rem;
     }
+    .stButton {
+        margin-top: 0.55rem;
+        margin-bottom: 0.3rem;
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-st.markdown('<div class="main-card">', unsafe_allow_html=True)
 st.markdown('<div class="headline">Omkar ❤️ Illia</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subline">Time left for us to meet</div>',
@@ -147,5 +144,3 @@ def render_live_countdown() -> None:
 
 
 render_live_countdown()
-
-st.markdown("</div>", unsafe_allow_html=True)
