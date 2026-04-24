@@ -44,26 +44,19 @@ st.markdown(
     [data-testid="stAppViewContainer"] {
         padding-top: 0 !important;
     }
-    [data-testid="stAppViewContainer"] > .main {
-        padding-top: 0 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
-    [data-testid="stAppViewContainer"] > .main > div {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
     .block-container {
         max-width: 760px;
         width: 100%;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         margin: 0 auto !important;
+    }
+    .center-wrap {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(760px, 92vw);
     }
     .headline {
         text-align: center;
@@ -142,6 +135,7 @@ html(
     height=0,
 )
 
+st.markdown('<div class="center-wrap">', unsafe_allow_html=True)
 st.markdown('<div class="headline">Omkar ❤️ Illia</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subline">Time left for us to meet</div>',
@@ -201,3 +195,4 @@ def render_live_countdown() -> None:
 
 
 render_live_countdown()
+st.markdown("</div>", unsafe_allow_html=True)
