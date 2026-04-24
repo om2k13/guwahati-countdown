@@ -4,7 +4,6 @@ from datetime import datetime
 import streamlit as st
 
 MEET_TIME = datetime(2026, 4, 30, 8, 15, 0)
-COUNTDOWN_START = datetime(2026, 4, 24, 14, 0, 0)
 
 ROMANTIC_FUNNY_LINES = [
     "Every second without you is suspiciously longer than normal physics allows.",
@@ -130,13 +129,6 @@ def render_live_countdown() -> None:
                 f'<div class="time-box"><div class="time-number">{seconds}</div><div class="time-label">SECONDS</div></div>',
                 unsafe_allow_html=True,
             )
-
-        total_wait_seconds = max((MEET_TIME - COUNTDOWN_START).total_seconds(), 1)
-        remaining_seconds = max((MEET_TIME - now).total_seconds(), 0)
-        progress = max(0.0, min(1.0, 1 - (remaining_seconds / total_wait_seconds)))
-
-        st.markdown('<div class="mini-title">Love Bar</div>', unsafe_allow_html=True)
-        st.progress(progress)
 
         if st.button("Give me a new love line 💌", use_container_width=True):
             previous_line = st.session_state.get("last_line", "")
