@@ -2,6 +2,7 @@ import random
 from datetime import datetime
 
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 
 MEET_TIME = datetime(2026, 4, 30, 8, 15, 0)
 COUNTDOWN_START = datetime(2026, 4, 24, 14, 0, 0)
@@ -22,6 +23,8 @@ ROMANTIC_FUNNY_LINES = [
 ]
 
 st.set_page_config(page_title="Omkar + Illia", page_icon="💖", layout="centered")
+# Re-run the script every second so the timer updates in real time.
+st_autorefresh(interval=1000, key="live_countdown_refresh")
 
 st.markdown(
     """
@@ -135,13 +138,20 @@ if diff.total_seconds() > 0:
         f"Love meter: {progress * 100:.1f}% | Flight at 5:00 AM, landing at 8:15 AM on April 30."
     )
 
-    previous_line = st.session_state.get("last_line", "")
-    available_lines = [line for line in ROMANTIC_FUNNY_LINES if line != previous_line]
-    selected_line = random.choice(available_lines if available_lines else ROMANTIC_FUNNY_LINES)
-    st.session_state["last_line"] = selected_line
+    if "last_line" not in st.session_state:
+        st.session_state["last_line"] = random.choice(ROMANTIC_FUNNY_LINES)
+    selected_line = st.session_state["last_line"]
+
+    if st.button("Give me a new love line 💌", use_container_width=True):
+        previous_line = st.session_state.get("last_line", "")
+        available_lines = [line for line in ROMANTIC_FUNNY_LINES if line != previous_line]
+        st.session_state["last_line"] = random.choice(
+            available_lines if available_lines else ROMANTIC_FUNNY_LINES
+        )
+        selected_line = st.session_state["last_line"]
 
     st.markdown(f'<div class="line-card">{selected_line}</div>', unsafe_allow_html=True)
-    st.caption("Refresh for a new funny + romantic line made just for Omkar and Illia.")
+    st.caption("Timer updates every second. Tap the button for a new funny + romantic line.")
 else:
     st.balloons()
     st.success("It is finally our moment. I am all yours. ❤️")
