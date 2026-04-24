@@ -44,19 +44,26 @@ st.markdown(
     [data-testid="stAppViewContainer"] {
         padding-top: 0 !important;
     }
-    .main {
+    [data-testid="stAppViewContainer"] > .main {
         padding-top: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    [data-testid="stAppViewContainer"] > .main > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
     }
     .block-container {
         max-width: 760px;
+        width: 100%;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
-    }
-    .main .block-container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        margin: 0 auto !important;
     }
     .headline {
         text-align: center;
